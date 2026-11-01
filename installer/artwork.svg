@@ -1,0 +1,42 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="480" height="920" viewBox="0 0 480 920">
+  <title>Switch2NativeControllerDriver setup artwork</title>
+  <defs>
+    <linearGradient id="bg" x2="1" y2="1"><stop stop-color="#101b2d"/><stop offset="1" stop-color="#09111f"/></linearGradient>
+    <linearGradient id="left" x2="1" y2="1"><stop stop-color="#5addf4"/><stop offset="1" stop-color="#1684d1"/></linearGradient>
+    <linearGradient id="right" x2="1" y2="1"><stop stop-color="#ff828b"/><stop offset="1" stop-color="#e24f68"/></linearGradient>
+    <pattern id="grid" width="36" height="36" patternUnits="userSpaceOnUse"><path d="M36 0H0V36" fill="none" stroke="#b4d3ff" stroke-opacity=".035"/></pattern>
+  </defs>
+  <rect width="480" height="920" fill="url(#bg)"/>
+  <rect width="480" height="920" fill="url(#grid)"/>
+  <path d="M44 67H86" stroke="#53d4f2" stroke-width="5" stroke-linecap="round"/>
+  <g font-family="Segoe UI,Arial,sans-serif">
+    <text x="44" y="126" fill="#f3f7ff" font-size="38" font-weight="700">Switch2Native</text>
+    <text x="44" y="172" fill="#f3f7ff" font-size="38" font-weight="700">ControllerDriver</text>
+    <text x="46" y="218" fill="#a9bed8" font-size="20">Your controllers.</text>
+    <text x="46" y="247" fill="#a9bed8" font-size="20">Native Windows input.</text>
+  </g>
+  <circle cx="240" cy="489" r="174" fill="none" stroke="#29445e"/>
+  <circle cx="240" cy="489" r="140" fill="none" stroke="#20344c" stroke-dasharray="4 9"/>
+  <path d="M31 489H449M240 296V687" stroke="#263c55" stroke-dasharray="3 8"/>
+  <g transform="translate(87 344) rotate(-10 54 143) scale(1.25)">
+    <rect width="86" height="228" rx="34" fill="url(#left)"/>
+    <circle cx="43" cy="60" r="23" fill="#111d30" stroke="#a4eff7" stroke-opacity=".5"/>
+    <circle cx="43" cy="140" r="8" fill="#142539"/><circle cx="43" cy="176" r="8" fill="#142539"/>
+    <circle cx="25" cy="158" r="8" fill="#142539"/><circle cx="61" cy="158" r="8" fill="#142539"/>
+    <path d="M56 23H67" stroke="#15304b" stroke-width="4" stroke-linecap="round"/>
+  </g>
+  <g transform="translate(285 344) rotate(10 54 143) scale(1.25)">
+    <rect width="86" height="228" rx="34" fill="url(#right)"/>
+    <circle cx="43" cy="52" r="8" fill="#342137"/><circle cx="43" cy="88" r="8" fill="#342137"/>
+    <circle cx="25" cy="70" r="8" fill="#342137"/><circle cx="61" cy="70" r="8" fill="#70f4b0"/>
+    <circle cx="43" cy="153" r="23" fill="#111d30" stroke="#ffbbc8" stroke-opacity=".5"/>
+    <path d="M20 20V30M15 25H25" stroke="#542335" stroke-width="4" stroke-linecap="round"/>
+  </g>
+  <circle cx="240" cy="489" r="5" fill="#70f4b0"/>
+  <path d="M44 748H436" stroke="#263c55"/>
+  <g font-family="Segoe UI,Arial,sans-serif" fill="#c5d4e9" font-size="18">
+    <text x="46" y="793">USB + BLUETOOTH</text>
+    <text x="46" y="825" fill="#849bb8">Gamepad · Motion · Mouse</text>
+    <text x="46" y="877" fill="#53d4f2" font-size="15">WINDOWS 11 / X64</text>
+  </g>
+</svg>

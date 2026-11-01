@@ -53,9 +53,9 @@ try {
        CertificateThumbprint=$certificate.Thumbprint; CertificateExpiry=$certificate.NotAfter.ToUniversalTime().ToString('o');
        SourceArchive="source/$sourceName"; Compiler=$compilerVersion.ToString() } |
         ConvertTo-Json | Set-Content (Join-Path $stage 'build-info.json') -Encoding UTF8
-    @('#define PackageVersion "' + $version + '"',
-      '#define CertificateThumbprint "' + $certificate.Thumbprint + '"',
-      '#define CertificateExpiry "' + $certificate.NotAfter.ToString('yyyy-MM-dd') + '"') |
+    @(('#define PackageVersion "' + $version + '"'),
+      ('#define CertificateThumbprint "' + $certificate.Thumbprint + '"'),
+      ('#define CertificateExpiry "' + $certificate.NotAfter.ToString('yyyy-MM-dd') + '"')) |
         Set-Content (Join-Path $stage 'package.iss') -Encoding UTF8
     $arguments = @("/DStageDir=$stage", "/DOutputDir=$output")
     if ($PreviewUiOnly) { $arguments += '/DPreviewUiOnly=1' }

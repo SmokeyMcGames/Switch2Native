@@ -8,6 +8,7 @@ From a clean committed Windows checkout:
 .\tools\Build.ps1
 .\tests\installer_tests.ps1
 .\tools\Prepare-Package.ps1
+.\tests\installer_package_tests.ps1
 $compiler = .\tools\Get-InnoCompiler.ps1
 .\tools\Build-Installer.ps1 -IsccPath $compiler
 ```

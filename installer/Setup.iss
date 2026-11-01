@@ -29,7 +29,10 @@ ArchitecturesInstallIn64BitMode=x64os
 MinVersion=10.0.22000
 WizardStyle=modern dynamic windows11 hidebevels
 WizardSizePercent=120,115
-WizardImageFile=
+WizardImageFile=artwork.png
+WizardImageFileDynamicDark=artwork.png
+WizardImageBackColor=#09111f
+WizardImageBackColorDynamicDark=#09111f
 WizardSmallImageFile=
 SetupIconFile=..\assets\controller.ico
 UninstallDisplayIcon={app}\controller.ico
@@ -70,10 +73,10 @@ Filename: "ms-settings:bluetooth"; Description: "Open Windows Bluetooth settings
 
 [Messages]
 WelcomeLabel1=Your controllers. Ready for Windows.
-WelcomeLabel2=Install %1 with gamepad input, native motion sensors, optical and gyro mouse control, and individual controller settings.%n%nSetup includes everything needed on a Windows 11 x64 PC. No developer tools or separate downloads are required.%n%nDevelopment preview - review the signing information on the next pages.
+WelcomeLabel2=Install {#AppName} with gamepad input, native motion sensors, optical and gyro mouse control, and individual controller settings.%n%nSetup includes everything needed on a Windows 11 x64 PC. No developer tools or separate downloads are required.%n%nDevelopment preview - review the signing information on the next pages.
 FinishedHeadingLabel=Ready to connect
 FinishedLabel=Pair a Joy-Con 2 or Pro Controller in Windows Bluetooth settings, or connect the Pro Controller by USB.%n%nIf a newly paired controller says Not connected, press a normal button once. The tray appears when a controller connects.%n%nRight-click the tray icon for Settings, mouse modes and Joy-Con grouping.
-UninstallConfirm=Remove %1 and its driver, service and recorded development certificates?%n%nController profiles and Windows Bluetooth pairings will be kept.
+ConfirmUninstall=Remove %1 and its driver, service and recorded development certificates?%n%nController profiles and Windows Bluetooth pairings will be kept.
 
 [Code]
 var
@@ -82,22 +85,12 @@ var
   DriverReady: Boolean;
 
 procedure InitializeWizard;
-var
-  Identity: TNewStaticText;
 begin
+  WizardForm.WizardSmallBitmapImage.Visible := False;
   WizardForm.WelcomeLabel1.Font.Size := 22;
   WizardForm.WelcomeLabel1.Height := ScaleY(78);
   WizardForm.WelcomeLabel2.Top := WizardForm.WelcomeLabel1.Top + WizardForm.WelcomeLabel1.Height + ScaleY(12);
   WizardForm.WelcomeLabel2.Height := ScaleY(220);
-  Identity := TNewStaticText.Create(WizardForm);
-  Identity.Parent := WizardForm.WelcomePage;
-  Identity.Caption := 'SWITCH2' + #13#10 + 'NATIVE' + #13#10 + 'CONTROLLER' + #13#10 + 'DRIVER';
-  Identity.Font.Size := 16;
-  Identity.Font.Style := [fsBold];
-  Identity.Left := ScaleX(24);
-  Identity.Top := ScaleY(68);
-  Identity.Width := ScaleX(150);
-  Identity.Height := ScaleY(150);
   TrustPage := CreateInputOptionPage(wpLicense, 'Development signing',
     'A local trust decision for this preview',
     'This package is signed with a temporary project development certificate. It is not Microsoft-certified or signed by a publicly trusted publisher.' + #13#10#13#10 +

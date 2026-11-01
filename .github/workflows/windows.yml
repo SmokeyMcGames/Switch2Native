@@ -30,6 +30,7 @@ jobs:
         shell: powershell
         run: |
           .\tools\Prepare-Package.ps1
+          .\tests\installer_package_tests.ps1
           $compiler = .\tools\Get-InnoCompiler.ps1
           .\tools\Build-Installer.ps1 -IsccPath $compiler
       - name: Upload setup and corresponding source
