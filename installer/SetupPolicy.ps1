@@ -1,5 +1,57 @@
 # SPDX-License-Identifier: GPL-3.0-only
 # Read-only checks shared by setup and the installer regression tests.
+function Test-EmbeddedSignature([string]$Path) {
+    # PowerShell collapses CERT_E_UNTRUSTEDROOT into UnknownError on Windows 11.
+    # Inspect the exact WinTrust result instead of allowing all unknown errors or
+    # importing a certificate merely to verify an uninstalled payload.
+    if (-not ('Switch2Setup.Signatures' -as [type])) {
+        Add-Type -TypeDefinition @'
+using System;
+using System.Runtime.InteropServices;
+namespace Switch2Setup {
+    public static class Signatures {
+        [StructLayout(LayoutKind.Sequential, CharSet=CharSet.Unicode)]
+        struct FileInfo {
+            public uint Size;
+            [MarshalAs(UnmanagedType.LPWStr)] public string Path;
+            public IntPtr Handle, Subject;
+        }
+        [StructLayout(LayoutKind.Sequential)]
+        struct TrustData {
+            public uint Size;
+            public IntPtr Policy, Sip;
+            public uint Ui, Revocation, Choice;
+            public IntPtr File;
+            public uint StateAction;
+            public IntPtr State, Url;
+            public uint Flags, Context;
+            public IntPtr Settings;
+        }
+        [DllImport("wintrust.dll", ExactSpelling=true)]
+        static extern int WinVerifyTrust(IntPtr window, ref Guid action, ref TrustData data);
+        public static int Verify(string path) {
+            var file = new FileInfo { Size=(uint)Marshal.SizeOf(typeof(FileInfo)), Path=path };
+            var data = new TrustData { Size=(uint)Marshal.SizeOf(typeof(TrustData)),
+                Ui=2, Choice=1, StateAction=1, Flags=0x1010 };
+            data.File=Marshal.AllocHGlobal(Marshal.SizeOf(typeof(FileInfo)));
+            Marshal.StructureToPtr(file, data.File, false);
+            var action = new Guid("00AAC56B-CD44-11D0-8CC2-00C04FC295EE");
+            try { return WinVerifyTrust(new IntPtr(-1), ref action, ref data); }
+            finally {
+                data.StateAction=2;
+                WinVerifyTrust(new IntPtr(-1), ref action, ref data);
+                Marshal.DestroyStructure(data.File, typeof(FileInfo));
+                Marshal.FreeHGlobal(data.File);
+            }
+        }
+    }
+}
+'@
+    }
+    $result = [Switch2Setup.Signatures]::Verify($Path)
+    return $result -eq 0 -or $result -eq -2146762487 # CERT_E_UNTRUSTEDROOT only
+}
+
 function Get-PackageVersion([string]$Path) {
     $lines = @(Select-String -LiteralPath $Path -Pattern '^DriverVer=')
     if ($lines.Count -ne 1) { throw 'Expected one DriverVer in the package INF.' }
@@ -51,7 +103,7 @@ function Test-SetupPackage([string]$Package) {
     }
     foreach ($file in ($files | Where-Object { $_ -match '\.(exe|dll|cat)$' })) {
         $signature = Get-AuthenticodeSignature -LiteralPath (Join-Path $Package $file)
-        if ($signature.Status -notin 'Valid','NotTrusted' -or $signature.SignerCertificate.Thumbprint -ne $cert.Thumbprint) {
+        if (-not (Test-EmbeddedSignature (Join-Path $Package $file)) -or $signature.SignerCertificate.Thumbprint -ne $cert.Thumbprint) {
             throw "The package signature could not be verified: $file ($($signature.Status))."
         }
     }
