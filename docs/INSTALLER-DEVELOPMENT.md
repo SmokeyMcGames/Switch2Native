@@ -2,6 +2,8 @@
 
 The setup project is `installer/Setup.iss`, built with Inno Setup 6.7.4. The bootstrap is pinned by SHA-256 and Authenticode publisher. The generated executable uses the system's light/dark mode, Segoe UI and DPI-aware native controls. It is an offline **development preview**, not a production-signed release.
 
+The portrait panel extends the repository's original banner artwork. Its editable source is `installer/artwork.svg`; `artwork.png` is the checked-in render used by setup. To regenerate after an art edit with ImageMagick: `magick -background none installer/artwork.svg installer/artwork.png`. Rendering the art is not an end-user or CI dependency.
+
 From a clean committed Windows checkout:
 
 ```powershell

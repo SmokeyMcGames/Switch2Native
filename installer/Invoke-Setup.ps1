@@ -65,9 +65,16 @@ try {
             }
         }
         $operation = Get-SetupAction $native $sensor $nativeInstalled $sensorInstalled $record.Status
-        $restart = if ($operation -eq 'transport') {
+        $restart = if ($operation -eq 'maintain') {
+            # No devices are changed by this path. Preserve the actual prior
+            # transaction result rather than attributing unrelated flags to setup.
+            [bool]$record.RestartRequired
+        } elseif ($operation -eq 'transport') {
             @($pendingRoles | Where-Object { $_ -in 'ProHub','JoyHub' }).Count -gt 0
         } else { $pendingRoles.Count -gt 0 }
+        if ($operation -eq 'maintain' -and ($nativeInstalled[2] -ne $native -or $nativeInstalled[3] -ne $native)) {
+            throw 'The recorded coordinators have inconsistent versions. Preserve the installation journal for recovery.'
+        }
         if ($restart -and $operation -ne 'maintain') { throw 'Windows has a pending driver restart. Save your work, restart Windows, then run setup again.' }
         $message = "Ready: $operation. Driver $native. Controller profiles and Windows pairings are preserved."
         if ($Action -eq 'Install') {
