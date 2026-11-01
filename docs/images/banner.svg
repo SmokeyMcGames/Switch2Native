@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="360" viewBox="0 0 1280 360" role="img" aria-labelledby="title desc">
+  <title id="title">Switch2Native</title>
+  <desc id="desc">Your controllers. Native Windows input. USB, Bluetooth, motion and mouse.</desc>
+  <defs>
+    <linearGradient id="bg" x2="1" y2="1"><stop stop-color="#101b2d"/><stop offset="1" stop-color="#09111f"/></linearGradient>
+    <linearGradient id="left" x2="1" y2="1"><stop stop-color="#5addf4"/><stop offset="1" stop-color="#1684d1"/></linearGradient>
+    <linearGradient id="right" x2="1" y2="1"><stop stop-color="#ff828b"/><stop offset="1" stop-color="#e24f68"/></linearGradient>
+    <pattern id="grid" width="36" height="36" patternUnits="userSpaceOnUse"><path d="M36 0H0V36" fill="none" stroke="#b4d3ff" stroke-opacity=".035"/></pattern>
+  </defs>
+  <rect width="1280" height="360" rx="24" fill="url(#bg)"/>
+  <rect width="1280" height="360" rx="24" fill="url(#grid)"/>
+  <path d="M60 65H100" stroke="#53d4f2" stroke-width="5" stroke-linecap="round"/>
+  <text x="60" y="126" fill="#f3f7ff" font-family="Segoe UI,Arial,sans-serif" font-size="53" font-weight="700">Switch2Native</text>
+  <text x="61" y="175" fill="#c5d4e9" font-family="Segoe UI,Arial,sans-serif" font-size="25">Your controllers. Native Windows input.</text>
+  <text x="61" y="218" fill="#849bb8" font-family="Segoe UI,Arial,sans-serif" font-size="17">PRO CONTROLLER + JOY-CON 2</text>
+  <g font-family="Segoe UI,Arial,sans-serif" font-size="15" fill="#d2e8fa">
+    <rect x="60" y="262" width="73" height="34" rx="17" fill="#193348"/><text x="82" y="284">USB</text>
+    <rect x="144" y="262" width="110" height="34" rx="17" fill="#193348"/><text x="163" y="284">Bluetooth</text>
+    <rect x="265" y="262" width="94" height="34" rx="17" fill="#193348"/><text x="285" y="284">Motion</text>
+    <rect x="370" y="262" width="91" height="34" rx="17" fill="#193348"/><text x="390" y="284">Mouse</text>
+  </g>
+  <circle cx="1000" cy="180" r="135" fill="none" stroke="#29445e"/>
+  <circle cx="1000" cy="180" r="103" fill="none" stroke="#20344c" stroke-dasharray="4 9"/>
+  <path d="M831 180H1169M1000 17V343" stroke="#263c55" stroke-dasharray="3 8"/>
+  <g transform="translate(876 66) rotate(-10 43 114)">
+    <rect width="86" height="228" rx="34" fill="url(#left)"/>
+    <circle cx="43" cy="60" r="23" fill="#111d30" stroke="#a4eff7" stroke-opacity=".5"/>
+    <circle cx="43" cy="140" r="8" fill="#142539"/><circle cx="43" cy="176" r="8" fill="#142539"/>
+    <circle cx="25" cy="158" r="8" fill="#142539"/><circle cx="61" cy="158" r="8" fill="#142539"/>
+    <path d="M56 23H67" stroke="#15304b" stroke-width="4" stroke-linecap="round"/>
+  </g>
+  <g transform="translate(1038 66) rotate(10 43 114)">
+    <rect width="86" height="228" rx="34" fill="url(#right)"/>
+    <circle cx="43" cy="52" r="8" fill="#342137"/><circle cx="43" cy="88" r="8" fill="#342137"/>
+    <circle cx="25" cy="70" r="8" fill="#342137"/><circle cx="61" cy="70" r="8" fill="#70f4b0"/>
+    <circle cx="43" cy="153" r="23" fill="#111d30" stroke="#ffbbc8" stroke-opacity=".5"/>
+    <path d="M20 20V30M15 25H25" stroke="#542335" stroke-width="4" stroke-linecap="round"/>
+  </g>
+  <circle cx="1000" cy="180" r="5" fill="#70f4b0"/>
+</svg>

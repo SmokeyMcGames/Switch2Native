@@ -1,0 +1,22 @@
+name: Feature request
+description: Propose a focused improvement.
+labels: [enhancement]
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: What problem should this solve?
+    validations:
+      required: true
+  - type: textarea
+    id: behavior
+    attributes:
+      label: Proposed behavior
+      description: Include affected controllers, transport and alternatives considered.
+    validations:
+      required: true
+  - type: textarea
+    id: testing
+    attributes:
+      label: Hardware available for testing
+      description: Model only; no serial numbers or Bluetooth addresses.

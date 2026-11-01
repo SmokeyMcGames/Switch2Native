@@ -1,0 +1,27 @@
+/build/
+/out/
+/.research/
+/.cache/
+/captures/
+*.user
+
+# Private development history and hardware-specific research records.
+/HANDOFF.md
+/JOYCON_HANDOFF.md
+/VALIDATION.md
+/JOYCONS.md
+/WINDOWS_PAIRING.md
+/MOTION_PROTOCOL.md
+/PACKED_MOTION.md
+/build-*/
+/model-preview.png
+*.pfx
+*.p12
+*.pem
+*.key
+*.cer
+*.cat
+*.etl
+*.dmp
+.env
+.env.*

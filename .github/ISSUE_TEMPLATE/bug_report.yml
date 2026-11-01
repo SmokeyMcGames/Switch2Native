@@ -1,0 +1,58 @@
+name: Bug report
+description: Report a reproducible controller, driver or tray issue.
+labels: [bug]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        For security issues use private vulnerability reporting. Remove serials, Bluetooth addresses, keys and personal paths.
+  - type: input
+    id: version
+    attributes:
+      label: Version or commit
+      placeholder: 0.3.9.2 / commit SHA
+    validations:
+      required: true
+  - type: input
+    id: windows
+    attributes:
+      label: Windows build and Bluetooth adapter
+    validations:
+      required: true
+  - type: dropdown
+    id: controller
+    attributes:
+      label: Controller
+      options:
+        - Pro Controller
+        - Joy-Con 2 (L)
+        - Joy-Con 2 (R)
+        - Multiple controllers
+    validations:
+      required: true
+  - type: dropdown
+    id: transport
+    attributes:
+      label: Transport
+      options: [USB, Bluetooth, USB/Bluetooth handoff]
+    validations:
+      required: true
+  - type: textarea
+    id: reproduce
+    attributes:
+      label: Reproduction steps, expected result and actual result
+      description: Include controller grouping, mouse mode and other controller software.
+    validations:
+      required: true
+  - type: textarea
+    id: evidence
+    attributes:
+      label: Minimal redacted evidence
+      description: State which behavior was tested physically. Avoid full capture archives.
+  - type: checkboxes
+    id: privacy
+    attributes:
+      label: Before submitting
+      options:
+        - label: I checked known limitations and removed private identifiers from this report.
+          required: true

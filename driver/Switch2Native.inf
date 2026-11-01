@@ -1,0 +1,108 @@
+[Version]
+Signature="$WINDOWS NT$"
+Class=HIDClass
+ClassGuid={745a17a0-74d3-11d0-b6fe-00a0c90f57da}
+Provider=%Provider%
+DriverVer=10/31/2026,0.3.9.2
+CatalogFile=Switch2Native.cat
+PnpLockdown=1
+
+[DestinationDirs]
+DefaultDestDir=13
+[SourceDisksNames]
+1=%DiskName%
+[SourceDisksFiles]
+Switch2NativeDriver.dll=1
+[Manufacturer]
+%Provider%=Devices,NTamd64.10.0...22000
+[Devices.NTamd64.10.0...22000]
+%DeviceDesc%=Install,ROOT\SWITCH2NATIVE
+%MotionDesc%=Motion,ROOT\SWITCH2MOTION
+%JoyHubDesc%=Motion,ROOT\SWITCH2JOYHUB
+%ProHubDesc%=Motion,ROOT\SWITCH2PROHUB
+%JoyPadDesc%=Install,ROOT\SWITCH2JOYPAD1
+%JoyPadDesc%=Install,ROOT\SWITCH2JOYPAD2
+%JoyPadDesc%=Install,ROOT\SWITCH2JOYPAD3
+%JoyPadDesc%=Install,ROOT\SWITCH2JOYPAD4
+%JoyMotionDesc%=Motion,ROOT\SWITCH2JOYMOTION1
+%JoyMotionDesc%=Motion,ROOT\SWITCH2JOYMOTION2
+%JoyMotionDesc%=Motion,ROOT\SWITCH2JOYMOTION3
+%JoyMotionDesc%=Motion,ROOT\SWITCH2JOYMOTION4
+
+[Install.NT]
+CopyFiles=DriverCopy
+AddReg=XInputSettings
+Include=MsHidUmdf.inf,WUDFRD.inf
+Needs=MsHidUmdf.NT,WUDFRD_LowerFilter.NT
+[Install.NT.HW]
+Include=MsHidUmdf.inf,WUDFRD.inf
+Needs=MsHidUmdf.NT.HW,WUDFRD_LowerFilter.NT.HW
+[Install.NT.Services]
+Include=MsHidUmdf.inf,WUDFRD.inf
+Needs=MsHidUmdf.NT.Services,WUDFRD_LowerFilter.NT.Services
+AddService=xinputhid,0x000001f8,XInputService
+[Install.NT.Filters]
+Include=WUDFRD.inf
+Needs=WUDFRD_LowerFilter.NT.Filters
+AddFilter=xinputhid,,XInputFilter
+[XInputFilter]
+FilterPosition=Upper
+[XInputSettings]
+HKR,,DevicePropertyFlags,0x00010001,1
+[XInputService]
+DisplayName=%XInputName%
+ServiceType=1
+StartType=3
+ErrorControl=1
+ServiceBinary=%12%\xinputhid.sys
+LoadOrderGroup=Base
+
+[Install.NT.Wdf]
+UmdfService=Switch2NativeDriver,UmdfInstall
+UmdfServiceOrder=Switch2NativeDriver
+UmdfKernelModeClientPolicy=AllowKernelModeClients
+UmdfFileObjectPolicy=AllowNullAndUnknownFileObjects
+UmdfMethodNeitherAction=Copy
+UmdfFsContextUsePolicy=CanUseFsContext2
+UmdfHostPriority=PriorityHigh
+UmdfHostProcessSharing=ProcessSharingDisabled
+
+[Motion.NT]
+CopyFiles=DriverCopy
+Include=MsHidUmdf.inf,WUDFRD.inf
+Needs=MsHidUmdf.NT,WUDFRD_LowerFilter.NT
+[Motion.NT.HW]
+Include=MsHidUmdf.inf,WUDFRD.inf
+Needs=MsHidUmdf.NT.HW,WUDFRD_LowerFilter.NT.HW
+[Motion.NT.Services]
+Include=MsHidUmdf.inf,WUDFRD.inf
+Needs=MsHidUmdf.NT.Services,WUDFRD_LowerFilter.NT.Services
+[Motion.NT.Filters]
+Include=WUDFRD.inf
+Needs=WUDFRD_LowerFilter.NT.Filters
+[Motion.NT.Wdf]
+UmdfService=Switch2NativeDriver,UmdfInstall
+UmdfServiceOrder=Switch2NativeDriver
+UmdfKernelModeClientPolicy=AllowKernelModeClients
+UmdfFileObjectPolicy=AllowNullAndUnknownFileObjects
+UmdfMethodNeitherAction=Copy
+UmdfFsContextUsePolicy=CanUseFsContext2
+UmdfHostPriority=PriorityHigh
+UmdfHostProcessSharing=ProcessSharingDisabled
+[UmdfInstall]
+UmdfLibraryVersion=2.31.0
+ServiceBinary=%13%\Switch2NativeDriver.dll
+[DriverCopy]
+Switch2NativeDriver.dll
+[Strings]
+Provider="Switch2Native Development"
+DiskName="Switch2Native local prototype"
+DeviceDesc="Switch 2 Pro Controller (Switch2Native)"
+MotionDesc="Switch 2 Pro Controller Motion (Switch2Native)"
+XInputName="XINPUT HID Filter Driver"
+
+JoyHubDesc="Switch 2 Joy-Con Coordinator (Switch2Native)"
+JoyPadDesc="Switch 2 Joy-Con Controller (Switch2Native)"
+JoyMotionDesc="Switch 2 Joy-Con Motion (Switch2Native)"
+
+ProHubDesc="Switch 2 Pro Controller Coordinator (Switch2Native)"

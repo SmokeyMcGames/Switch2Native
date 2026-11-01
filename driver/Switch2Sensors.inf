@@ -1,0 +1,51 @@
+[Version]
+Signature="$WINDOWS NT$"
+Class=Sensor
+ClassGuid={5175D334-C371-4806-B3BA-71FD53C9258D}
+Provider=%Provider%
+DriverVer=10/31/2026,0.3.8.5
+CatalogFile=Switch2Sensors.cat
+PnpLockdown=1
+
+[DestinationDirs]
+DefaultDestDir=13
+[SourceDisksNames]
+1=%DiskName%
+[SourceDisksFiles]
+Switch2SensorDriver.dll=1
+[Manufacturer]
+%Provider%=Devices,NTamd64.10.0...22000
+[Devices.NTamd64.10.0...22000]
+%ProDeviceDesc%=Install,ROOT\SWITCH2PROSENSOR
+%DeviceDesc%=Install,ROOT\SWITCH2JOYSENSOR1
+%DeviceDesc%=Install,ROOT\SWITCH2JOYSENSOR2
+%DeviceDesc%=Install,ROOT\SWITCH2JOYSENSOR3
+%DeviceDesc%=Install,ROOT\SWITCH2JOYSENSOR4
+
+[Install.NT]
+CopyFiles=DriverCopy
+Include=WUDFRD.inf
+Needs=WUDFRD.NT
+[Install.NT.HW]
+Include=WUDFRD.inf
+Needs=WUDFRD.NT.HW
+[Install.NT.Services]
+Include=WUDFRD.inf
+Needs=WUDFRD.NT.Services
+[Install.NT.Wdf]
+UmdfService=Switch2SensorDriver,SensorInstall
+UmdfServiceOrder=Switch2SensorDriver
+UmdfFileObjectPolicy=AllowNullAndUnknownFileObjects
+UmdfFsContextUsePolicy=CannotUseFsContexts
+UmdfHostProcessSharing=ProcessSharingDisabled
+[SensorInstall]
+UmdfLibraryVersion=2.31.0
+ServiceBinary=%13%\Switch2SensorDriver.dll
+UmdfExtensions=SensorsCx0102
+[DriverCopy]
+Switch2SensorDriver.dll
+[Strings]
+Provider="Switch2Native Development"
+DiskName="Switch2Native local prototype"
+DeviceDesc="Switch 2 Joy-Con Timestamped Motion (Switch2Native)"
+ProDeviceDesc="Switch 2 Pro Controller Timestamped Motion (Switch2Native)"
