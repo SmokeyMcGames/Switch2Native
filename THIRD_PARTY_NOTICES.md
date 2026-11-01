@@ -91,3 +91,6 @@ freely, subject to the following restrictions:
 2. Altered source versions must be plainly marked as such, and must not be
    misrepresented as being the original software.
 3. This notice may not be removed or altered from any source distribution.
+## Installer runtime
+
+The optional offline installer is built using unmodified Inno Setup 6.7.4 by Jordan Russell and Martijn Laan. Its license is preserved in [installer/INNO-LICENSE.txt](installer/INNO-LICENSE.txt) and in installed notices. Inno Setup is separately licensed; the project does not claim authorship of its runtime. The compiler is downloaded only during maintainer/CI builds from a hash-pinned, publisher-verified official release; it is not required on end-user PCs. Upstream: <https://jrsoftware.org/> and <https://github.com/jrsoftware/issrc/tree/is-6_7_4>.

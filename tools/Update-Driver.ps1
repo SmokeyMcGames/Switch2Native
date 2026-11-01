@@ -3,7 +3,8 @@
 param(
     [Parameter(Mandatory)][switch]$TrustLocalDevelopmentCertificate,
     [switch]$TransportOnly,
-    [switch]$Resume
+    [switch]$Resume,
+    [string]$LogDirectory = ''
 )
 
 $ErrorActionPreference = 'Stop'
@@ -117,8 +118,9 @@ $targets = foreach ($role in $roles) {
         Version=$(if ($selected) { $version.ToString() } else { $installedVersion.ToString() });
         Started=($null -ne $flags -and ($flags -band 8) -ne 0) }
 }
-New-Item -ItemType Directory -Path (Join-Path $projectRoot 'captures') -Force | Out-Null
-Start-Transcript -Path (Join-Path $projectRoot 'captures\driver-update.log') -Append | Out-Null
+if (-not $LogDirectory) { $LogDirectory = Join-Path $projectRoot 'captures' }
+New-Item -ItemType Directory -Path $LogDirectory -Force | Out-Null
+Start-Transcript -Path (Join-Path $LogDirectory 'driver-update.log') -Append | Out-Null
 $restartRequired = $false
 $serviceStopped = $false
 $backup = Join-Path $stateDirectory ('updates\' + (Get-Date -Format 'yyyyMMdd-HHmmss'))

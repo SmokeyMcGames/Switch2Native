@@ -1,3 +1,4 @@
+#include "branding.hpp"
 #include "settings_window.hpp"
 #include "settings_graphics.hpp"
 #include <commctrl.h>
@@ -87,7 +88,7 @@ void SettingsWindow::show(HWND owner, HICON icon) {
     const int x = monitor.rcWork.left + (monitor.rcWork.right - monitor.rcWork.left - width) / 2;
     const int y = monitor.rcWork.top + (monitor.rcWork.bottom - monitor.rcWork.top - height) / 2;
     window_ = CreateWindowExW(WS_EX_APPWINDOW | WS_EX_CONTROLPARENT, ClassName,
-                              L"Switch2Native Controller Driver - Settings",
+                              switch2::SettingsTitle,
                               WS_OVERLAPPEDWINDOW | WS_VSCROLL | WS_CLIPCHILDREN, x, y, width,
                               height, owner, nullptr, cls.hInstance, this);
     if (!window_) {

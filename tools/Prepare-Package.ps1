@@ -5,7 +5,7 @@ $projectRoot = Split-Path $PSScriptRoot -Parent
 $package = Join-Path $projectRoot 'out\driver'
 $kitRoot = 'C:\Program Files (x86)\Windows Kits\10'
 $signTool = "$kitRoot\bin\10.0.26100.0\x64\signtool.exe"
-$binaries = @('Switch2NativeDriver.dll','Switch2Manager.exe','Switch2JoyCons.exe')
+$binaries = @('Switch2NativeDriver.dll','Switch2Manager.exe','Switch2JoyCons.exe','Switch2DeviceSetup.exe')
 $infs = @('Switch2Native.inf')
 $catalogs = @('Switch2Native.cat')
 if (Test-Path -LiteralPath (Join-Path $package 'Switch2Sensors.inf')) {
@@ -35,7 +35,12 @@ try {
     foreach ($file in ($binaries + $infs + $catalogs + 'Switch2Native.cer')) {
         $hashes[$file] = (Get-FileHash -Algorithm SHA256 -LiteralPath (Join-Path $package $file)).Hash
     }
-    @{ CertificateThumbprint=$certificate.Thumbprint; Files=$hashes } | ConvertTo-Json -Depth 3 |
+    $sourceCommit = $null
+    Push-Location $projectRoot
+    try {
+        if (-not @(& git status --porcelain --untracked-files=normal).Count) { $sourceCommit = (& git rev-parse HEAD).Trim() }
+    } finally { Pop-Location }
+    @{ CertificateThumbprint=$certificate.Thumbprint; Files=$hashes; SourceCommit=$sourceCommit } | ConvertTo-Json -Depth 3 |
         Set-Content -LiteralPath (Join-Path $package 'manifest.json') -Encoding UTF8
     Write-Output "Prepared $package. Certificate: $($certificate.Thumbprint). No system trust or driver installation has changed."
 } finally {

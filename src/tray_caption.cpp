@@ -1,3 +1,4 @@
+#include "branding.hpp"
 #include "tray_caption.hpp"
 #include <algorithm>
 
@@ -37,7 +38,7 @@ void Caption::show(HWND tray_window, UINT icon_id, HICON icon, const Notificatio
         // Status captions must never take focus or intercept mouse/game input.
         window_ = CreateWindowExW(WS_EX_NOACTIVATE | WS_EX_TOOLWINDOW | WS_EX_TOPMOST |
                                      WS_EX_LAYERED | WS_EX_TRANSPARENT,
-                                 CaptionClass, L"Switch2Native Controller Driver", WS_POPUP,
+                                 CaptionClass, switch2::AppName, WS_POPUP,
                                  0, 0, 0, 0, nullptr, nullptr, type.hInstance, this);
         if (!window_) return;
     }
@@ -114,7 +115,7 @@ void Caption::paint() {
     auto old_font = SelectObject(dc, header_font_);
     SetTextColor(dc, RGB(185, 189, 198));
     RECT header{px(44), px(12), width_ - px(14), px(34)};
-    DrawTextW(dc, L"Switch2Native Controller Driver", -1, &header, DT_SINGLELINE | DT_VCENTER | DT_NOPREFIX);
+    DrawTextW(dc, switch2::AppName, -1, &header, DT_SINGLELINE | DT_VCENTER | DT_NOPREFIX);
     SelectObject(dc, title_font_);
     SetTextColor(dc, RGB(245, 246, 248));
     DrawTextW(dc, message_.title.c_str(), -1, &title_rect_, DT_WORDBREAK | DT_NOPREFIX);

@@ -1,9 +1,11 @@
 #Requires -RunAsAdministrator
 [CmdletBinding()]
-param()
+param([string]$LogDirectory = '')
 $ErrorActionPreference = 'Stop'
-New-Item -ItemType Directory -Path (Join-Path (Split-Path $PSScriptRoot -Parent) 'captures') -Force | Out-Null
-Start-Transcript -Path (Join-Path (Split-Path $PSScriptRoot -Parent) 'captures\driver-uninstall.log') -Append | Out-Null
+if (-not $LogDirectory) { $LogDirectory = Join-Path (Split-Path $PSScriptRoot -Parent) 'captures' }
+New-Item -ItemType Directory -Path $LogDirectory -Force | Out-Null
+Start-Transcript -Path (Join-Path $LogDirectory 'driver-uninstall.log') -Append | Out-Null
+$restartRequired = $false
 $stateFile = Join-Path $env:ProgramData 'Switch2Native\installation.json'
 if (-not (Test-Path -LiteralPath $stateFile)) { throw 'No Switch2Native installation record exists.' }
 $record = Get-Content -LiteralPath $stateFile -Raw | ConvertFrom-Json
@@ -74,9 +76,11 @@ if ($deviceId) {
     if ($null -ne $nodeFlags -and $problem -ne 22 -and -not ($nodeFlags -band 0x100)) {
         & pnputil.exe /disable-device $deviceId
         if ($LASTEXITCODE -notin 0,3010) { throw 'Device disable failed; leaving installation available for recovery.' }
+        if ($LASTEXITCODE -eq 3010) { $restartRequired = $true }
     }
     & pnputil.exe /remove-device $deviceId
     if ($LASTEXITCODE -notin 0,3010) { throw 'Device removal failed; leaving the package and certificate for recovery.' }
+    if ($LASTEXITCODE -eq 3010) { $restartRequired = $true }
 }
 }
 $packages = @($record) + @($record.PackageHistory | Where-Object { $_ })
@@ -90,10 +94,15 @@ foreach ($packageEntry in ($packageEntries | Sort-Object { $_.Inf } -Unique)) {
     $installedInf = Join-Path $env:windir "INF\$($packageEntry.Inf)"
     if (-not (Test-Path -LiteralPath $installedInf)) { continue }
     if ((Test-Path -LiteralPath $installedInf) -and -not (Select-String -LiteralPath $installedInf -SimpleMatch $packageEntry.HardwareId -Quiet)) {
-        throw 'The recorded INF no longer belongs to Switch2Native.'
+        if ($packageEntry.Inf -in $record.PublishedInf,$record.SensorPublishedInf) {
+            throw 'The active recorded INF no longer belongs to Switch2Native.'
+        }
+        Write-Output "Leaving recycled historical package $($packageEntry.Inf) untouched."
+        continue
     }
     & pnputil.exe /delete-driver $packageEntry.Inf /uninstall
     if ($LASTEXITCODE -notin 0,3010) { throw 'Driver package removal failed; leaving the certificate for recovery.' }
+    if ($LASTEXITCODE -eq 3010) { $restartRequired = $true }
 }
 foreach ($thumbprint in ($packages.CertificateThumbprint | Sort-Object -Unique)) {
     if ($thumbprint -notmatch '^[0-9A-Fa-f]{40}$') { throw 'Invalid certificate thumbprint in package history.' }
@@ -125,5 +134,6 @@ if ($record.ApplicationDirectory -and (Test-Path -LiteralPath $applicationDirect
     if (-not (Get-ChildItem -LiteralPath $applicationDirectory -Force)) { Remove-Item -LiteralPath $applicationDirectory }
 }
 Remove-Item -LiteralPath $stateFile
+@{ RestartRequired=$restartRequired } | ConvertTo-Json | Set-Content -LiteralPath (Join-Path $LogDirectory 'uninstall-result.json') -Encoding UTF8
 Write-Output 'Removed the recorded Switch2Native devices, driver package, helper apps, and development certificate.'
 Stop-Transcript | Out-Null

@@ -2,24 +2,26 @@
 
 <img src="docs/images/banner.svg" alt="Switch2Native — Your controllers. Native Windows input." width="100%">
 
-# Switch2Native
+# Switch2NativeControllerDriver
 
 **Nintendo Switch 2 controllers, at home on Windows 11.**
 
 Native gamepad input · Motion sensors · Optical & gyro mouse · Per-controller settings
 
-[![Windows build](https://github.com/SmokeyMcGames/Switch2Native/actions/workflows/windows.yml/badge.svg)](https://github.com/SmokeyMcGames/Switch2Native/actions/workflows/windows.yml)
+[![Windows build](https://github.com/SmokeyMcGames/Switch2NativeControllerDriver/actions/workflows/windows.yml/badge.svg)](https://github.com/SmokeyMcGames/Switch2NativeControllerDriver/actions/workflows/windows.yml)
 [![License: GPL v3](https://img.shields.io/badge/license-GPLv3-blue.svg)](LICENSE)
 ![Platform: Windows 11 x64](https://img.shields.io/badge/platform-Windows_11_x64-0078D4)
 ![Status: experimental](https://img.shields.io/badge/status-experimental-orange)
 
-[Getting started](docs/INSTALLATION.md) · [Settings guide](SETTINGS.md) · [Controls](docs/CONTROLS.md) · [Report a bug](https://github.com/SmokeyMcGames/Switch2Native/issues/new/choose)
+[Getting started](docs/INSTALLATION.md) · [Settings guide](SETTINGS.md) · [Controls](docs/CONTROLS.md) · [Report a bug](https://github.com/SmokeyMcGames/Switch2NativeControllerDriver/issues/new/choose)
 
 </div>
 
-Switch2Native is an independent, open-source Windows driver and tray application for the **Nintendo Switch 2 Pro Controller and Joy-Con 2**. It exposes gamepads through Windows XInput, motion through native Windows sensor APIs, and Joy-Con mouse input through standard HID mouse reports.
+Switch2NativeControllerDriver is an independent, open-source Windows driver and tray application for the **Nintendo Switch 2 Pro Controller and Joy-Con 2**. It exposes gamepads through Windows XInput, motion through native Windows sensor APIs, and Joy-Con mouse input through standard HID mouse reports.
 
-**Development release: 0.3.9.2.** This source-first project has been tested on a limited set of hardware. It is not a Microsoft-certified or Nintendo-endorsed driver. Building and installing currently requires Windows development tools and explicit trust in a locally generated development certificate. Read the [installation and signing notes](docs/INSTALLATION.md) first.
+**Development preview: 0.3.9.3.** The offline setup bundles the driver, tray, manager, uninstall support and exact corresponding source. End users do not need Visual Studio or the Windows Driver Kit. See [Downloads](https://github.com/SmokeyMcGames/Switch2NativeControllerDriver/releases) and the [installation and signing notes](docs/INSTALLATION.md).
+
+This project has been tested on a limited set of hardware. The preview uses explicit development-certificate trust; it is **not a Microsoft-certified or Nintendo-endorsed production driver**. Windows policy may block installation. Production signing and broader clean-PC testing remain release requirements.
 
 ## What it does
 
@@ -51,11 +53,11 @@ First-generation Switch controllers, charging grips and other controller models 
 
 ## Connect and play
 
-1. [Build, sign and install](docs/INSTALLATION.md) the development package.
+1. Run the [development preview setup](docs/INSTALLATION.md), review its certificate notice, and select Install. Source builds remain available.
 2. For Bluetooth, hold SYNC and select the controller in **Windows Settings → Bluetooth & devices → Add device → Bluetooth**.
 3. If it appears as paired but immediately says **Not connected**, press a normal button once. This first-pairing behavior is a known limitation.
 4. The player LED settles and the tray appears when connected. A Pro can also connect directly by USB.
-5. Right-click **Switch2Native Controller Driver** in the tray for **Settings...**, Joy-Con grouping and mouse modes.
+5. Right-click **Switch2NativeControllerDriver** in the tray for **Settings...**, Joy-Con grouping and mouse modes.
 
 The Joy-Con popup offers **Use both Joy-Cons as one controller?** and **Use both Joy-Cons separately?** Change the choice later from the tray. A lone Joy-Con uses a sideways layout with **SL/SR as shoulders**. Joy-Con player numbering is independent of the Pro. Removing a device in Windows removes it from the manager's paired roster.
 
@@ -107,7 +109,7 @@ Current stream configurations target roughly **200 distinct motion samples/s ove
 Requirements: **Windows 11 x64**, Visual Studio 2022 C++ tools, CMake 3.24+, Windows SDK/WDK **10.0.26100.0**, and UMDF **2.31** libraries.
 
 ```powershell
-git clone https://github.com/SmokeyMcGames/Switch2Native.git
+git clone https://github.com/SmokeyMcGames/Switch2NativeControllerDriver.git
 cd Switch2Native
 .\tools\Build.ps1
 ```
