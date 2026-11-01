@@ -38,6 +38,7 @@ try {
         $record = $null
         $nativeInstalled = @()
         $sensorInstalled = @()
+        $pendingRoles = @()
         if (Test-Path -LiteralPath $stateFile) {
             $record = Get-Content -LiteralPath $stateFile -Raw | ConvertFrom-Json
             foreach ($role in 'Native','Motion','ProHub','JoyHub','JoyPad1','JoyPad2','JoyPad3','JoyPad4',
@@ -45,13 +46,16 @@ try {
                 $field = if ($role -eq 'Native') { 'DeviceId' } else { "${role}DeviceId" }
                 $id = $record.$field
                 $hardware = "ROOT\SWITCH2$($role.ToUpperInvariant())"
-                if (-not $id -or $id -notlike 'ROOT\*' -or
-                    (Get-PnpDeviceProperty -InstanceId $id -KeyName DEVPKEY_Device_HardwareIds).Data -notcontains $hardware) {
+                if (-not $id -or $id -notlike 'ROOT\*') { throw "Invalid recorded $role identity." }
+                $properties = @{}
+                Get-PnpDeviceProperty -InstanceId $id -KeyName DEVPKEY_Device_HardwareIds,DEVPKEY_Device_DriverVersion,DEVPKEY_Device_IsRebootRequired |
+                    ForEach-Object { $properties[$_.KeyName] = $_.Data }
+                if ($properties.DEVPKEY_Device_HardwareIds -notcontains $hardware) {
                     throw "The recorded $role device is missing or has changed. Keep the installation record for recovery."
                 }
-                $version = [version](Get-PnpDeviceProperty -InstanceId $id -KeyName DEVPKEY_Device_DriverVersion).Data
+                $version = [version]$properties.DEVPKEY_Device_DriverVersion
                 if ($role -like '*Sensor*') { $sensorInstalled += $version } else { $nativeInstalled += $version }
-                if ((Get-PnpDeviceProperty -InstanceId $id -KeyName DEVPKEY_Device_IsRebootRequired -ErrorAction SilentlyContinue).Data) { $restart = $true }
+                if ($properties.DEVPKEY_Device_IsRebootRequired) { $pendingRoles += $role }
             }
             $service = Get-CimInstance Win32_Service -Filter "Name='Switch2Manager'"
             $expectedDirectory = Join-Path $env:ProgramFiles 'Switch2Native'
@@ -61,6 +65,9 @@ try {
             }
         }
         $operation = Get-SetupAction $native $sensor $nativeInstalled $sensorInstalled $record.Status
+        $restart = if ($operation -eq 'transport') {
+            @($pendingRoles | Where-Object { $_ -in 'ProHub','JoyHub' }).Count -gt 0
+        } else { $pendingRoles.Count -gt 0 }
         if ($restart -and $operation -ne 'maintain') { throw 'Windows has a pending driver restart. Save your work, restart Windows, then run setup again.' }
         $message = "Ready: $operation. Driver $native. Controller profiles and Windows pairings are preserved."
         if ($Action -eq 'Install') {
@@ -88,6 +95,7 @@ try {
                 }
             }
             $record = Get-Content -LiteralPath $stateFile -Raw | ConvertFrom-Json
+            Set-Service -Name Switch2Manager -DisplayName 'Switch2NativeControllerDriver Manager'
             $restart = $restart -or $record.RestartRequired
             $message = 'Ready to connect. Pair in Windows Bluetooth settings, or connect the Pro Controller by USB.'
         }

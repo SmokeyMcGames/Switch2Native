@@ -1,6 +1,6 @@
 <div align="center">
 
-<img src="docs/images/banner.svg" alt="Switch2Native — Your controllers. Native Windows input." width="100%">
+<img src="docs/images/banner.svg" alt="Switch2NativeControllerDriver — Your controllers. Native Windows input." width="100%">
 
 # Switch2NativeControllerDriver
 
@@ -110,7 +110,7 @@ Requirements: **Windows 11 x64**, Visual Studio 2022 C++ tools, CMake 3.24+, Win
 
 ```powershell
 git clone https://github.com/SmokeyMcGames/Switch2NativeControllerDriver.git
-cd Switch2Native
+cd Switch2NativeControllerDriver
 .\tools\Build.ps1
 ```
 

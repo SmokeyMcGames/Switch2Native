@@ -1,6 +1,6 @@
 # Controller settings
 
-Right-click the **Switch2Native Controller Driver** tray icon and choose **Settings...**. Every active physical controller has its own panel. The Pro Controller shows both sticks; each Joy-Con shows its stick even when both halves share one gamepad. Scroll to reach additional panels.
+Right-click the **Switch2NativeControllerDriver** tray icon and choose **Settings...**. Every active physical controller has its own panel. The Pro Controller shows both sticks; each Joy-Con shows its stick even when both halves share one gamepad. Scroll to reach additional panels.
 
 ## Sticks and dead zones
 

@@ -9,8 +9,12 @@ $root = Split-Path $PSScriptRoot -Parent
 $package = Join-Path $root 'out\driver'
 $certificate = Test-SetupPackage $package
 if (-not (Test-Path -LiteralPath $IsccPath)) { throw 'Install Inno Setup 6.7.4 or supply -IsccPath. It is a build tool only, not an end-user requirement.' }
-$compilerVersion = [version](Get-Item -LiteralPath $IsccPath).VersionInfo.FileVersion
-if ($compilerVersion -lt [version]'6.7.4' -or $compilerVersion -ge [version]'6.8') { throw 'Use the reviewed Inno Setup 6.7.4 toolchain.' }
+$IsccPath = (Resolve-Path -LiteralPath $IsccPath).Path
+# ISCC's PE version resource is 0.0.0.0; pin the reviewed official binary instead.
+$compilerVersion = 'Inno Setup 6.7.4'
+if ((Get-FileHash -LiteralPath $IsccPath).Hash -ne 'F02FA0E5F237B47D7ED1EDAE9B991866EC94FE02AF61EB6A73E94F92FE8E0604') {
+    throw 'Use the reviewed Inno Setup 6.7.4 toolchain (tools/Get-InnoCompiler.ps1).'
+}
 $version = (Get-PackageVersion (Join-Path $package 'Switch2Native.inf')).ToString()
 Push-Location $root
 try {

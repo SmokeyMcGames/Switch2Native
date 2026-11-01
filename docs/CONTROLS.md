@@ -55,6 +55,6 @@ Recognized chords suppress their component gamepad/sensitivity actions. A modifi
 
 ## Tray
 
-Hover text: **Switch2Native Controller Driver**. Menu: Settings, grouping, mouse mode/source, optical sensitivity and **Always show in taskbar tray**. Changes use fading app captions rather than Windows notification banners.
+Hover text: **Switch2NativeControllerDriver**. Menu: Settings, grouping, mouse mode/source, optical sensitivity and **Always show in taskbar tray**. Changes use fading app captions rather than Windows notification banners.
 
 The background manager remains available. The tray only runs with a supported controller connected and finishes its last-disconnect caption before exiting. [Settings guide](../SETTINGS.md).

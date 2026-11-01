@@ -1,6 +1,6 @@
 # Copyright and license scope
 
-Original Switch2Native contributions are provided by SmokeyMcGames and contributors (2026 onward), subject to their respective rights. The project as distributed is licensed under **GNU GPL version 3 only (SPDX: GPL-3.0-only)**. [LICENSE](LICENSE) contains the full unmodified text.
+Original Switch2NativeControllerDriver contributions are provided by SmokeyMcGames and contributors (2026 onward), subject to their respective rights. The project as distributed is licensed under **GNU GPL version 3 only (SPDX: GPL-3.0-only)**. [LICENSE](LICENSE) contains the full unmodified text.
 
 This does not claim exclusive ownership of upstream work or relicense it. Adapted WinStadia portions remain GPLv3; SDL-derived material retains its zlib notice; historical MIT notices are preserved in [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md). See [provenance](docs/PROVENANCE.md).
 

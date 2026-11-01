@@ -173,7 +173,7 @@ if ($hasJoyCons) {
         Copy-Item -LiteralPath (Join-Path $package $file) -Destination (Join-Path $applicationDirectory $file)
     }
     $serviceExecutable = Join-Path $applicationDirectory 'Switch2Manager.exe'
-    New-Service -Name Switch2Manager -DisplayName 'Switch2Native Joy-Con Manager' -BinaryPathName "`"$serviceExecutable`"" -StartupType Automatic | Out-Null
+    New-Service -Name Switch2Manager -DisplayName 'Switch2NativeControllerDriver Manager' -BinaryPathName "`"$serviceExecutable`"" -StartupType Automatic | Out-Null
     & sc.exe failure Switch2Manager reset= 86400 actions= restart/5000/restart/10000/none/0 | Out-Null
     if ($LASTEXITCODE) { throw 'Could not configure Joy-Con manager recovery.' }
     # The service launches the tray in the signed-in user's session only when
