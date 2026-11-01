@@ -13,6 +13,8 @@ The service owns Windows-paired discovery and machine-local profiles. Dedicated 
 
 ## Build loop
 
+The [build guide](BUILDING.md) lists developer tool requirements and source-build installation commands. End users can use the offline installer without those tools.
+
 ```powershell
 .\tools\Build.ps1
 ctest --test-dir build -C Release --output-on-failure
@@ -42,4 +44,4 @@ Settings reports are 64 bytes; physical button diagnostics occupy a capability-g
 
 Use a new driver version for binary changes. Never disguise changed binaries under an already installed version. [Release procedure](RELEASING.md).
 
-Windows CI builds/tests/validates INFs only. It never signs, installs, changes trust or operates hardware.
+Windows CI builds, tests and validates INFs, then creates a development-signed preview installer using a temporary key that is deleted afterward. It runs package/signature checks without installing the driver, adding machine-wide certificate trust or operating controller hardware. CI is not a clean-PC installation test.
