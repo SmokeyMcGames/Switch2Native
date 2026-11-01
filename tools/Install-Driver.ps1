@@ -118,7 +118,8 @@ $installedDevices = @(Get-Switch2NativeDevice)
 $device = if ($installedDevices.Count -eq 1) { $installedDevices[0] } else { $null }
 if ($device) {
     $record.DeviceId = $device.InstanceId
-    $record.PublishedInf = (Get-PnpDeviceProperty -InstanceId $device.InstanceId -KeyName DEVPKEY_Device_DriverInfPath -ErrorAction SilentlyContinue).Data
+    $selectedInf = (Get-PnpDeviceProperty -InstanceId $device.InstanceId -KeyName DEVPKEY_Device_DriverInfPath -ErrorAction SilentlyContinue).Data
+    if ($selectedInf) { $record.PublishedInf = $selectedInf }
 }
 $record.Status = if ($installResult -le 1 -and $device) { 'installed' } else { 'failed' }
 $record | ConvertTo-Json | Set-Content -LiteralPath $stateFile -Encoding UTF8
@@ -151,7 +152,8 @@ if ($hasJoyCons) {
             $roleId = $roleDevices[0].InstanceId
             $record["${role}DeviceId"] = $roleId
             if ($role -like '*Sensor*') {
-                $record.SensorPublishedInf = (Get-PnpDeviceProperty -InstanceId $roleId -KeyName DEVPKEY_Device_DriverInfPath).Data
+                $selectedInf = (Get-PnpDeviceProperty -InstanceId $roleId -KeyName DEVPKEY_Device_DriverInfPath -ErrorAction SilentlyContinue).Data
+                if ($selectedInf) { $record.SensorPublishedInf = $selectedInf }
             }
             $configurationKey = [Microsoft.Win32.Registry]::LocalMachine.CreateSubKey('SOFTWARE\Switch2Native')
             try { $configurationKey.SetValue("${role}DeviceId", $roleId) } finally { $configurationKey.Dispose() }

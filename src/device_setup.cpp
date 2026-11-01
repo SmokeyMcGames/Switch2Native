@@ -6,12 +6,17 @@
 #include <shellapi.h>
 #include <shlobj.h>
 #include <cfgmgr32.h>
+#include <initguid.h>
+#include <devpkey.h>
 #include <array>
 #include <cwchar>
 #include <iostream>
 #include <stdexcept>
 #include <string>
 #include <vector>
+#include <filesystem>
+#include <fstream>
+#include <iterator>
 
 namespace {
 constexpr std::array<const wchar_t*, 17> hardwareIds = {
@@ -72,6 +77,24 @@ void rejectDuplicate(const std::wstring& id) {
     }
     check(GetLastError() == ERROR_NO_MORE_ITEMS, "Enumerate device list");
 }
+bool alreadySelected(HDEVINFO devices, SP_DEVINFO_DATA& device, const std::wstring& sourcePath) {
+    wchar_t published[MAX_PATH]{}, windows[MAX_PATH]{};
+    DEVPROPTYPE type{};
+    if (!SetupDiGetDevicePropertyW(devices, &device, &DEVPKEY_Device_DriverInfPath, &type,
+            reinterpret_cast<BYTE*>(published), sizeof(published), nullptr, 0) || type != DEVPROP_TYPE_STRING)
+        return false;
+    const std::wstring name = published;
+    if (name.find_first_of(L"\\/:") != std::wstring::npos || !name.starts_with(L"oem") || !name.ends_with(L".inf"))
+        return false;
+    const auto length = GetWindowsDirectoryW(windows, MAX_PATH);
+    if (!length || length >= MAX_PATH) return false;
+    std::ifstream source(std::filesystem::path(sourcePath), std::ios::binary);
+    std::ifstream selected(std::filesystem::path(windows) / L"INF" / name, std::ios::binary);
+    if (!source || !selected) return false;
+    const std::string expected((std::istreambuf_iterator<char>(source)), {});
+    const std::string actual((std::istreambuf_iterator<char>(selected)), {});
+    return !expected.empty() && expected == actual;
+}
 int install(const std::wstring& path, const std::wstring& id, const GUID& classId) {
     if (!IsUserAnAdmin()) throw std::runtime_error("Administrator access is required.");
     rejectDuplicate(id);
@@ -90,7 +113,15 @@ int install(const std::wstring& path, const std::wstring& id, const GUID& classI
     // Leave a registered node on failure so the journal-driven uninstaller can find
     // and remove it. Never remove a device created by a different setup process.
     BOOL restart = FALSE;
-    check(UpdateDriverForPlugAndPlayDevicesW(nullptr, id.c_str(), path.c_str(), 0, &restart), "Install driver");
+    if (!UpdateDriverForPlugAndPlayDevicesW(nullptr, id.c_str(), path.c_str(), 0, &restart)) {
+        const auto error = GetLastError();
+        // PnP can bind the already-staged package as soon as the root registers.
+        // Accept only the exact requested INF, without forcing a reinstall.
+        if (error != ERROR_NO_MORE_ITEMS || !alreadySelected(devices.value, device, path)) {
+            SetLastError(error);
+            check(false, "Install driver");
+        }
+    }
     SP_DEVINSTALL_PARAMS_W parameters{sizeof(SP_DEVINSTALL_PARAMS_W)};
     check(SetupDiGetDeviceInstallParamsW(devices.value, &device, &parameters), "Read restart state");
     restart = restart || (parameters.Flags & (DI_NEEDREBOOT | DI_NEEDRESTART));
