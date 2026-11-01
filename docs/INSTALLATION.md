@@ -1,98 +1,40 @@
-# Install, update and build
+# Install Switch2NativeControllerDriver
 
-## Offline setup (development preview)
+## Download and install
 
-Download `Switch2NativeControllerDriver-0.3.9.3-Preview-Setup-x64.exe` from the project's [releases](https://github.com/SmokeyMcGames/Switch2NativeControllerDriver/releases). PR validation builds are also available as GitHub Actions artifacts; those require a GitHub login. Use only official project downloads and compare the accompanying `SHA256SUMS.txt` if needed.
+**[Download the Windows installer](https://github.com/SmokeyMcGames/Switch2NativeControllerDriver/releases/download/v0.3.9.3-preview.1/Switch2NativeControllerDriver-0.3.9.3-Preview-Setup-x64.exe)** — development preview 0.3.9.3.
 
-1. Close games and competing controller software, then run setup on a **Windows 11 x64 test PC** with administrator access.
-2. Read the GPL license and development-signing page. The checkbox explicitly authorizes installing the bundled public development certificate into LocalMachine Root and TrustedPublisher. Cancel if you do not trust it.
-3. Choose Install. Setup checks the package, installs virtual devices and the manager, and adds an entry to Windows Installed apps. No SDK, WDK, CMake, Visual Studio or runtime download is required on the target PC.
-4. Pair through Windows Bluetooth settings, or connect a Pro Controller by USB. Press a normal button once if a newly paired controller sleeps. The tray appears while a controller is connected.
+**No separate software prerequisites or manual commands are needed.** Setup includes the driver, tray app, background manager, device-registration helper, offline guide and uninstaller. It handles the installation steps for you, including adding the development certificate after your consent. You do not need Visual Studio, the SDK/WDK, CMake, devcon or a separate Visual C++ runtime.
 
-Setup follows Windows light/dark appearance. Its final page offers the offline guide and Bluetooth settings. The app's visible name is **Switch2NativeControllerDriver**; internal service names, hardware IDs and saved paths retain `Switch2Native` for compatibility.
+You need a **Windows 11 x64 PC**, permission to approve Windows' administrator prompt, and a supported controller. Wireless use requires a Bluetooth LE adapter; the Pro Controller also supports a data-capable USB cable. Windows security policy must permit the development-signed package; see the preview note below.
 
-Run a newer setup to update in place. This release uses the compatible transport/helper update path. Running the same version refreshes setup files and documentation without forcing a driver replacement; it is not a damaged-driver repair. Downgrades, unknown ownership, incomplete installs and unsafe mixed versions are rejected. A failed fresh install attempts rollback; an update failure preserves its journal and backup instead of uninstalling the existing driver.
+1. Download the **Preview-Setup-x64.exe** linked above. The source ZIP is for developers and is not needed for installation.
+2. Close games and other controller software. Double-click the downloaded installer and approve the Windows administrator prompt.
+3. Read the license and development-signing notice. If you trust this project, check the certificate consent box and choose **Install**. Setup performs the certificate and driver installation automatically.
+4. Select **Finish**, then connect your controller as described below. Restart only if setup reports that Windows requires it.
 
-Uninstall through **Settings → Apps → Installed apps → Switch2NativeControllerDriver**, or its Start menu entry. Physical Windows pairing and controller profiles remain. Logs live under `%ProgramData%\Switch2Native\logs`; failed transactions may retain recovery scripts under `%ProgramFiles%\Switch2Native Setup Recovery`. Do not delete the installation journal before recovery.
+The installer works offline once downloaded. There are no additional runtime or tool downloads during setup. Use the project's [Releases page](https://github.com/SmokeyMcGames/Switch2NativeControllerDriver/releases) for downloads; checksums and exact corresponding source are available there too.
 
-**Signing limitation:** setup's outer executable is not signed by a publicly trusted publisher. The payload uses an ephemeral development certificate, whose expiry is shown in setup and `build-info.json`. Replace an expired preview with a freshly built package. These packages are for development/testing, not production distribution. Windows/organization policy may block them; do not disable protections to bypass failures. Microsoft production signing is a separate release requirement. See [Microsoft's test-signing guidance](https://learn.microsoft.com/en-us/windows-hardware/drivers/install/how-to-test-sign-a-driver-package).
+## Connect a controller
 
-Setup reports an actual Windows restart requirement and defaults to restarting later. For unattended testing only: `/VERYSILENT /SUPPRESSMSGBOXES /NORESTART /TRUSTDEVCERT=1 /RESTARTEXITCODE=3010`. Explicit certificate consent is required; the default is no consent.
+- **Pro Controller over USB:** connect it directly to the PC with a data-capable cable.
+- **Bluetooth:** hold SYNC until the LEDs cycle, then open **Windows Settings → Bluetooth & devices → Add device → Bluetooth** and select the controller. If it initially says **Not connected**, press a normal button once. Joy-Con 2 uses Bluetooth only.
 
-Complete corresponding source, build/install scripts, GPL and notices are bundled under `%ProgramFiles%\Switch2Native Setup`, with source also attached beside the executable. No private signing key is distributed.
+The player LED becomes steady and the tray icon appears when connected. Right-click **Switch2NativeControllerDriver** in the tray for Settings and mouse/controller options. The tray closes after the last controller disconnects. Setup's final page can open Bluetooth settings and the offline guide for you.
 
-## Before installing
+## Update or uninstall
 
-The following instructions are for **building from source**. You need administrator access for installation and the SDK/WDK tools below on the build machine.
+Run a newer setup to update in place. Setup preserves your Windows pairings and per-controller settings. Running the same version refreshes setup files and documentation without forcing a driver replacement; it is not a damaged-driver repair. Setup reports an actual Windows restart requirement and defaults to restarting later.
 
-Local signing creates your own development certificate. Installation explicitly adds its public certificate to this PC's LocalMachine **Root** and **TrustedPublisher** stores. Only trust a package you built or reviewed. Do not install certificates or executables from issue attachments.
+To uninstall, open **Settings → Apps → Installed apps → Switch2NativeControllerDriver → Uninstall**, or use its Start menu entry. The uninstaller removes the recorded driver components and development certificate. Windows pairings and controller profiles remain.
 
-The scripts do not disable Secure Boot or Memory Integrity, enable global test-signing, replace physical Nintendo USB drivers, or restart Windows automatically. Windows may reject a package under a particular machine's security policy; do not weaken that policy to bypass an error.
+## About this development preview
 
-## Requirements
+This preview is for development/testing and has not yet been validated for fresh installation, rollback and full uninstall on a clean Windows 11 PC. Existing-PC update and same-version maintenance have been tested. It is not a production-signed or Microsoft-certified release.
 
-- Windows 11 x64 and a Bluetooth LE adapter for wireless controllers.
-- Visual Studio 2022 with Desktop development with C++ and MSVC tools.
-- CMake 3.24 or newer on PATH.
-- Windows SDK/WDK 10.0.26100.0, including UMDF 2.31 libraries.
-- WDK utilities: InfVerif, Inf2Cat and SignTool. Root-device registration uses the included `Switch2DeviceSetup` helper.
+The outer setup executable is not signed by a publicly trusted publisher. The bundled driver uses a temporary development certificate; setup displays its expiry and asks before adding it to the PC's trusted certificate stores. You do not need to import it manually. Use a fresh package if the certificate has expired.
 
-Scripts currently use the standard Windows Kits directory and VS2022 generator. ARM64 and alternative layouts are not validated.
-
-## Build and prepare
-
-From a normal PowerShell in the repository:
-
-```powershell
-.\tools\Build.ps1
-.\tools\Prepare-Package.ps1
-```
-
-Build runs seven test suites and both INF checks. Known desktop INF warning 2084 concerns reuse of inbox xinputhid.sys; passing checks do not imply Microsoft certification.
-
-Prepare signs the driver/helper binaries and catalogs, exports the public certificate and writes SHA-256 hashes to `out/driver/manifest.json`. The temporary private key is deleted afterward. Preparation does not install trust/devices. Rebuilding invalidates signatures: prepare again before installation.
-
-## Install
-
-Close competing software if it holds the controller. In **administrator PowerShell**, from the repository:
-
-```powershell
-.\tools\Install-Driver.ps1 -TrustLocalDevelopmentCertificate
-```
-
-No Bluetooth address argument is required. The manager discovers supported controllers paired in Windows. Connect a Pro by USB or pair through Windows Settings. If newly paired but disconnected, press a normal button.
-
-The installer creates virtual gamepad/motion/sensor devices, installs the manager service and tray under `%ProgramFiles%\Switch2Native`, and records owned IDs/packages/certificates in `%ProgramData%\Switch2Native\installation.json`. Keep that record for update/uninstall.
-
-## Update
-
-Build and prepare a **newer** package, then use administrator PowerShell:
-
-```powershell
-.\tools\Update-Driver.ps1 -TrustLocalDevelopmentCertificate
-```
-
-The updater validates hashes/ownership, pauses readers, updates existing nodes and restores operation while preserving instance IDs and Windows pairings. Recovery copies live under `%ProgramData%\Switch2Native\updates`.
-
-For maintainer-designated transport/helper-only changes with compatible consumer HID/IPC contracts and consumer drivers at least 0.3.8.5:
-
-```powershell
-.\tools\Update-Driver.ps1 -TrustLocalDevelopmentCertificate -TransportOnly
-```
-
-Version 0.3.9.2's diagnostic button addition supports this path. It leaves consumers at their installed versions. Incompatible descriptors, sensor readers or contracts require a full update.
-
-Windows can require a restart. Save work and follow the actual result; never kill WUDFHost or clear reboot flags to force replacement. `-Resume` is only for a recorded failed update after its cause is addressed.
-
-## Uninstall
-
-In administrator PowerShell:
-
-```powershell
-.\tools\Uninstall-Driver.ps1
-```
-
-Removes recorded project devices, service/helpers, owned packages and recorded development trust. Physical controller drivers and Windows pairing remain. Profiles/preferences, logs and backups may remain; see [Privacy](../PRIVACY.md). Do not delete installation metadata before uninstalling.
+Windows or organization policy may block this preview. Do not disable Windows protections to bypass an installation failure. Production signing is a project release requirement, not a tool users need to install. See [Microsoft's test-signing guidance](https://learn.microsoft.com/en-us/windows-hardware/drivers/install/how-to-test-sign-a-driver-package).
 
 ## Troubleshooting
 
@@ -108,3 +50,7 @@ Removes recorded project devices, service/helpers, owned packages and recorded d
 | Reboot required | Save work and complete the reported Windows restart. |
 
 See [Support](../SUPPORT.md) for redacted bug reports.
+
+Setup logs are under `%ProgramData%\Switch2Native\logs`. Keep the installation record and any recovery files if setup fails; include a redacted error message when reporting an issue. Setup rejects downgrades, incomplete installs and unrecognized device ownership rather than overwriting another installation. Failed fresh installs attempt rollback; failed updates keep their recovery records.
+
+Looking to modify or compile the project? The separate [developer build guide](BUILDING.md) covers the toolchain and manual scripts. Source, licenses and build metadata are also included under `%ProgramFiles%\Switch2Native Setup` after installation.

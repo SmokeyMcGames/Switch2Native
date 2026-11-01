@@ -19,7 +19,9 @@ Native gamepad input · Motion sensors · Optical & gyro mouse · Per-controller
 
 Switch2NativeControllerDriver is an independent, open-source Windows driver and tray application for the **Nintendo Switch 2 Pro Controller and Joy-Con 2**. It exposes gamepads through Windows XInput, motion through native Windows sensor APIs, and Joy-Con mouse input through standard HID mouse reports.
 
-**Development preview: 0.3.9.3.** The offline setup bundles the driver, tray, manager, uninstall support and exact corresponding source. End users do not need Visual Studio or the Windows Driver Kit. See [Downloads](https://github.com/SmokeyMcGames/Switch2NativeControllerDriver/releases) and the [installation and signing notes](docs/INSTALLATION.md).
+**[Download the Windows installer — development preview 0.3.9.3](https://github.com/SmokeyMcGames/Switch2NativeControllerDriver/releases/download/v0.3.9.3-preview.1/Switch2NativeControllerDriver-0.3.9.3-Preview-Setup-x64.exe)**
+
+**No separate software prerequisites or manual commands.** Download and run setup on Windows 11 x64, approve the Windows administrator prompt, review the development-certificate notice, and select Install. Setup includes the driver, tray, manager, offline guide and uninstaller, and handles certificate installation after consent. Visual Studio, SDK/WDK, CMake, devcon and a separate Visual C++ runtime are **not needed to use the app**. Wireless use requires a Bluetooth LE adapter. [Installation guide](docs/INSTALLATION.md) · [All releases](https://github.com/SmokeyMcGames/Switch2NativeControllerDriver/releases).
 
 This project has been tested on a limited set of hardware. The preview uses explicit development-certificate trust; it is **not a Microsoft-certified or Nintendo-endorsed production driver**. Windows policy may block installation. Production signing and broader clean-PC testing remain release requirements.
 
@@ -53,7 +55,7 @@ First-generation Switch controllers, charging grips and other controller models 
 
 ## Connect and play
 
-1. Run the [development preview setup](docs/INSTALLATION.md), review its certificate notice, and select Install. Source builds remain available.
+1. Run the [development preview setup](docs/INSTALLATION.md), review its certificate notice, and select Install.
 2. For Bluetooth, hold SYNC and select the controller in **Windows Settings → Bluetooth & devices → Add device → Bluetooth**.
 3. If it appears as paired but immediately says **Not connected**, press a normal button once. This first-pairing behavior is a known limitation.
 4. The player LED settles and the tray appears when connected. A Pro can also connect directly by USB.
@@ -104,19 +106,11 @@ Current stream configurations target roughly **200 distinct motion samples/s ove
 
 [Validation and known limits](docs/VALIDATION.md).
 
-## Build from source
+## For developers
 
-Requirements: **Windows 11 x64**, Visual Studio 2022 C++ tools, CMake 3.24+, Windows SDK/WDK **10.0.26100.0**, and UMDF **2.31** libraries.
+To modify or compile the project, follow the [developer build guide](docs/BUILDING.md) for build-machine tools and manual install/update scripts. To use the app, run the installer linked above; compiling the source is optional.
 
-```powershell
-git clone https://github.com/SmokeyMcGames/Switch2NativeControllerDriver.git
-cd Switch2NativeControllerDriver
-.\tools\Build.ps1
-```
-
-Build runs seven CTest suites and validates both INFs. It does **not** install a driver or change certificate trust. [Windows CI](.github/workflows/windows.yml) performs the same checks; CI is not hardware validation.
-
-Signing, installation, updates, uninstall and recovery are covered in [INSTALLATION.md](docs/INSTALLATION.md). This source release has no production-signed installer.
+[Windows CI](.github/workflows/windows.yml) builds the binaries, runs seven controller test suites and both INF checks, validates the installer and creates downloadable preview packages. These checks are not physical-controller or clean-PC installation tests. [Installer development](docs/INSTALLER-DEVELOPMENT.md).
 
 ## How it fits together
 
