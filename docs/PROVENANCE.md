@@ -10,7 +10,7 @@ This is a source/notice inventory for the initial public snapshot, reviewed 2026
 | Motion scale/clock-mode interpretation and rumble packet encoding | src/motion.cpp, src/protocol.cpp | [SDL Switch 2 driver](https://github.com/libsdl-org/SDL/blob/main/src/joystick/hidapi/SDL_hidapi_switch2.c), zlib; Sam Lantinga and Valve contributions. Reviewed source blob bf0e22f68ecbb05053ab25862a171894934ec5f2. |
 | Windows HID/USB protocol references | src/usb.cpp, src/protocol.cpp | [Altureus/Windows-Switch2-Pro-Controller](https://github.com/Altureus/Windows-Switch2-Pro-Controller), MIT; revision 2292326d46fdb53ccf69e576c058d017e384e2a6 reviewed. Historical attribution retained. |
 
-These are modified project implementations, not unmodified upstream distributions. Switch2Native adds root virtual devices, public Windows Bluetooth ownership, queued timestamped motion, multi-controller composition, profiles and its own tray/settings UI. It does not bundle upstream executables or libraries. GPLv3 governs the combined project; compatible upstream notices remain applicable.
+These are modified project implementations, not unmodified upstream distributions. Switch2NativeControllerDriver adds root virtual devices, public Windows Bluetooth ownership, queued timestamped motion, multi-controller composition, profiles and its own tray/settings UI. It does not bundle upstream executables or libraries. GPLv3 governs the combined project; compatible upstream notices remain applicable.
 
 Full texts and upstream caveats are retained in [THIRD_PARTY_NOTICES.md](../THIRD_PARTY_NOTICES.md) and [LICENSE](../LICENSE).
 
@@ -18,7 +18,7 @@ Full texts and upstream caveats are retained in [THIRD_PARTY_NOTICES.md](../THIR
 
 Earlier development notices cited [CareyScott/switch2controllerpc](https://github.com/CareyScott/switch2controllerpc). Its LICENSE at revision 4643a9b5f507e478abcc0eff6280363ac399ebc7 explicitly limits MIT to that author's additions and says the Nadeflore/TommyWabg ancestors lacked explicit licenses. **That MIT notice cannot grant permission for someone else's unlicensed code.** Attribution alone is not permission.
 
-The reviewed overlap concerns controller packet fields, GATT UUIDs, command headers, button bits and calibration layouts. Switch2Native's native C++ transport/parser uses its own data structures, cancellation, validation and state handling; the Python application, GUI, assets, runtime and virtual-controller bridge are not included. The historical notice is preserved transparently, not treated as blanket permission for those ancestors. No unlicensed Python implementation is vendored in this repository.
+The reviewed overlap concerns controller packet fields, GATT UUIDs, command headers, button bits and calibration layouts. Switch2NativeControllerDriver's native C++ transport/parser uses its own data structures, cancellation, validation and state handling; the Python application, GUI, assets, runtime and virtual-controller bridge are not included. The historical notice is preserved transparently, not treated as blanket permission for those ancestors. No unlicensed Python implementation is vendored in this repository.
 
 Future contributions must not copy or translate unlicensed implementation code. If a concrete inherited expressive section is identified, stop distributing that section until permission or a suitable independently implemented replacement is established. The review does not claim proof of absence of every possible copyright issue.
 

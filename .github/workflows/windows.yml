@@ -23,3 +23,24 @@ jobs:
       - name: Build and validate
         shell: powershell
         run: .\tools\Build.ps1
+      - name: Installer policy and device-helper checks (read only)
+        shell: powershell
+        run: .\tests\installer_tests.ps1
+      - name: Build development preview installer
+        shell: powershell
+        run: |
+          .\tools\Prepare-Package.ps1
+          .\tests\installer_package_tests.ps1
+          $compiler = .\tools\Get-InnoCompiler.ps1
+          .\tools\Build-Installer.ps1 -IsccPath $compiler
+      - name: Upload setup and corresponding source
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: Switch2NativeControllerDriver-preview-x64
+          path: |
+            out/installer/*-Preview-Setup-x64.exe
+            out/installer/*-source.zip
+            out/installer/build-info.json
+            out/installer/SHA256SUMS.txt
+          if-no-files-found: error
+          retention-days: 30

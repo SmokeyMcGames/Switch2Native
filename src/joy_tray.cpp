@@ -1,3 +1,4 @@
+#include "branding.hpp"
 #include "joy_ipc.hpp"
 #include "tray_visibility.hpp"
 #include "tray_caption.hpp"
@@ -54,7 +55,7 @@ void add_icon(HWND window) {
     icon.uFlags = NIF_MESSAGE | NIF_ICON | NIF_TIP | NIF_SHOWTIP;
     icon.uCallbackMessage = TrayMessage;
     icon.hIcon = app_icon;
-    wcscpy_s(icon.szTip, L"Switch2Native Controller Driver");
+    wcscpy_s(icon.szTip, switch2::AppName);
     icon_added = Shell_NotifyIconW(NIM_ADD, &icon) != FALSE;
     icon.uVersion = NOTIFYICON_VERSION_4;
     Shell_NotifyIconW(NIM_SETVERSION, &icon);
@@ -177,7 +178,7 @@ void choose_mode(HWND window, uint8_t pair = 0) {
     config.hwndParent = window;
     config.dwFlags = TDF_USE_COMMAND_LINKS | TDF_ALLOW_DIALOG_CANCELLATION | TDF_CALLBACK_TIMER |
                      TDF_SIZE_TO_CONTENT;
-    config.pszWindowTitle = L"Switch2Native Joy-Cons";
+    config.pszWindowTitle = switch2::AppName;
     config.pszMainInstruction = L"How would you like to use your Joy-Cons?";
     const auto content = pair_description(pair);
     config.pszContent = content.c_str();
@@ -200,7 +201,7 @@ void choose_mode(HWND window, uint8_t pair = 0) {
             MessageBoxW(window,
                         L"The connection changed before your choice was applied. Try again from "
                         L"the tray icon.",
-                        L"Switch2Native Joy-Cons", MB_OK | MB_ICONINFORMATION);
+                        switch2::AppName, MB_OK | MB_ICONINFORMATION);
         }
     }
     dialog_open = false;
@@ -210,7 +211,7 @@ void open_bluetooth_settings(HWND window) {
         window, L"open", L"ms-settings:bluetooth", nullptr, nullptr, SW_SHOWNORMAL));
     if (result <= 32)
         MessageBoxW(window, L"Open Windows Settings > Bluetooth & devices to pair a controller.",
-                    L"Switch2Native Controller Driver", MB_OK | MB_ICONINFORMATION);
+                    switch2::AppName, MB_OK | MB_ICONINFORMATION);
 }
 void menu(HWND window) {
     HMENU menu = CreatePopupMenu();
@@ -277,7 +278,7 @@ void menu(HWND window) {
         ipc::Response response;
         if (!ipc::exchange(request, response) || response.result)
             MessageBoxW(window, L"Mouse mode could not be changed. Please try again.",
-                        L"Switch2Native Controller Driver", MB_OK | MB_ICONINFORMATION);
+                        switch2::AppName, MB_OK | MB_ICONINFORMATION);
     }
     else if (selected == MenuAlwaysShow) {
         if (switch2::tray::save_preference(!always_show)) {
@@ -287,7 +288,7 @@ void menu(HWND window) {
                                                     L"Always show in taskbar tray: Off.", L"tray-visibility"});
         } else {
             MessageBoxW(window, L"Windows could not save the tray visibility preference.",
-                        L"Switch2Native Controller Driver", MB_OK | MB_ICONINFORMATION);
+                        switch2::AppName, MB_OK | MB_ICONINFORMATION);
         }
     }
     else if (selected == MenuExit) {
@@ -390,7 +391,7 @@ int WINAPI wWinMain(HINSTANCE instance, HINSTANCE, PWSTR, int) {
     window_class.lpszClassName = L"Switch2Native.JoyCons.Tray";
     if (!RegisterClassW(&window_class))
         return 1;
-    const auto window = CreateWindowExW(0, window_class.lpszClassName, L"Switch2Native Joy-Cons", WS_OVERLAPPED, 0,
+    const auto window = CreateWindowExW(0, window_class.lpszClassName, switch2::AppName, WS_OVERLAPPED, 0,
                                        0, 0, 0, nullptr, nullptr, instance, nullptr);
     if (!window)
         return 1;

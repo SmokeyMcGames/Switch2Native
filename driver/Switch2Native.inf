@@ -3,7 +3,7 @@ Signature="$WINDOWS NT$"
 Class=HIDClass
 ClassGuid={745a17a0-74d3-11d0-b6fe-00a0c90f57da}
 Provider=%Provider%
-DriverVer=10/31/2026,0.3.9.2
+DriverVer=10/31/2026,0.3.9.3
 CatalogFile=Switch2Native.cat
 PnpLockdown=1
 

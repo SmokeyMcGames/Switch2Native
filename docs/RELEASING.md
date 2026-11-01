@@ -11,3 +11,9 @@
 9. Inspect rendered documentation, issue forms, security reporting and CI.
 
 Initial 0.3.9.2 publication is source-only. GitHub generates source archives from its tag; no development certificate or prebuilt installer is attached.
+
+## Installer previews (0.3.9.3 onward)
+
+See [installer development](INSTALLER-DEVELOPMENT.md). Build from a clean commit and attach all four products from `out/installer`: setup EXE, corresponding source ZIP, `build-info.json` and `SHA256SUMS.txt`. Exclude the UI-only preview. Use a clearly marked **prerelease** with `--latest=false`; do not replace the previous release or imply production certification. A preview from an open PR must identify its exact commit and unmerged status. Verify hashes after upload.
+
+Before a normal release, complete the clean-Windows installation/update/uninstall matrix, arrange production signing, and replace the development-consent/signing path appropriately. Do not publish private keys or bypass Windows signing/security requirements. CI artifacts are short-lived test downloads, not a permanent release channel.

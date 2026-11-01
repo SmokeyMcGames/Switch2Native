@@ -1,6 +1,6 @@
 # Privacy and local data
 
-Switch2Native has no account system, cloud service, advertising, analytics or automatic crash uploads. Windows and GitHub have separate privacy policies. Bluetooth discovery/communication stays local through Windows.
+Switch2NativeControllerDriver has no account system, cloud service, advertising, analytics or automatic crash uploads. Windows and GitHub have separate privacy policies. Bluetooth discovery/communication stays local through Windows.
 
 Factory serials identify individual profiles; a Bluetooth address is fallback. These records are not sent to a project server. The manager uses supported controllers Windows records as paired.
 

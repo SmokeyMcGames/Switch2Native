@@ -2,7 +2,7 @@
 
 See [COPYRIGHT.md](COPYRIGHT.md) and [the provenance review](docs/PROVENANCE.md) for scope. This is a modified, independent project, not an upstream release. Upstream code and notices are not claimed as our original work. The CareyScott license caveat below is that upstream project's own statement; its MIT grant does not license its unlicensed ancestors.
 
-WinStadia source reviewed at 2778707f873ca7111586579b2de8bf418b6fe829 is credited to aisk and its contributors under GPLv3. The complete GPL text is supplied in LICENSE. Switch2Native changes the device model, transport ownership, reports and runtime behavior.
+WinStadia source reviewed at 2778707f873ca7111586579b2de8bf418b6fe829 is credited to aisk and its contributors under GPLv3. The complete GPL text is supplied in LICENSE. Switch2NativeControllerDriver changes the device model, transport ownership, reports and runtime behavior.
 
 This project is distributed under GPL-3.0. The Xbox-compatible HID descriptor and UMDF dispatch design are adapted from [aisk/WinStadia](https://github.com/aisk/WinStadia), GPL-3.0. Our driver uses a root virtual device and public Bluetooth APIs; it does not use WinStadia's private GATT interfaces.
 
@@ -74,7 +74,7 @@ https://github.com/libsdl-org/SDL/blob/main/src/joystick/hidapi/SDL_hidapi_switc
 
 Copyright (C) 1997-2026 Sam Lantinga <slouken@libsdl.org>
 
-SDL's Switch 2 source also credits code and logic contributed by Valve Corporation under the SDL zlib license. Switch2Native's motion/rumble adaptations are altered versions, including clock measurement and a reduced rumble amplitude ceiling.
+SDL's Switch 2 source also credits code and logic contributed by Valve Corporation under the SDL zlib license. Switch2NativeControllerDriver's motion/rumble adaptations are altered versions, including clock measurement and a reduced rumble amplitude ceiling.
 
 This software is provided 'as-is', without any express or implied
 warranty.  In no event will the authors be held liable for any damages
@@ -91,3 +91,6 @@ freely, subject to the following restrictions:
 2. Altered source versions must be plainly marked as such, and must not be
    misrepresented as being the original software.
 3. This notice may not be removed or altered from any source distribution.
+## Installer runtime
+
+The optional offline installer is built using unmodified Inno Setup 6.7.4 by Jordan Russell and Martijn Laan. Its license is preserved in [installer/INNO-LICENSE.txt](installer/INNO-LICENSE.txt) and in installed notices. Inno Setup is separately licensed; the project does not claim authorship of its runtime. The compiler is downloaded only during maintainer/CI builds from a hash-pinned, publisher-verified official release; it is not required on end-user PCs. Upstream: <https://jrsoftware.org/> and <https://github.com/jrsoftware/issrc/tree/is-6_7_4>.

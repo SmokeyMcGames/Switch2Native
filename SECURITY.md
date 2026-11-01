@@ -1,6 +1,6 @@
 # Security policy
 
-Use [GitHub private vulnerability reporting](https://github.com/SmokeyMcGames/Switch2Native/security/advisories/new) for privilege boundaries, installation, IPC, unsafe input parsing or code execution. Avoid public exploitation details before assessment.
+Use [GitHub private vulnerability reporting](https://github.com/SmokeyMcGames/Switch2NativeControllerDriver/security/advisories/new) for privilege boundaries, installation, IPC, unsafe input parsing or code execution. Avoid public exploitation details before assessment.
 
 Include affected commit/version, impact, reproduction and a minimal redacted example. Do not send private keys, pairing keys, full device inventories or personal logs. If the private form is unavailable, request a private contact in an issue without disclosing vulnerability details.
 
