@@ -45,4 +45,8 @@ $ErrorActionPreference = 'Continue' # Windows PowerShell wraps expected native s
 Assert-Equal 2 $LASTEXITCODE
 & $helper check (Join-Path $root 'driver\Switch2Sensors.inf') 'ROOT\SWITCH2NATIVE' 2>$null
 Assert-Equal 2 $LASTEXITCODE
+$ErrorActionPreference = 'Stop'
 Write-Output "$checks installer checks passed. No device, service or certificate stores were changed."
+# The final native calls deliberately reject unsafe inputs. Do not propagate
+# their expected nonzero exit code into the CI PowerShell host.
+exit 0
